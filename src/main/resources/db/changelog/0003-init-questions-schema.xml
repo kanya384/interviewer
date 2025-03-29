@@ -1,0 +1,53 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                           http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="create_questions_table" author="laurkan">
+        <preConditions>
+            <not>
+                <tableExists tableName="questions"/>
+            </not>
+        </preConditions>
+        <createTable tableName="questions">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="answer" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lesson_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="date">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="questions"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="create_questions_foreign_key_lesson" author="laurkan">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_questions_lesson"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="questions"
+                                 baseColumnNames="lesson_id"
+                                 referencedTableName="lessons"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+                                 constraintName="fk_questions_lesson"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="questions" constraintName="fk_question_lesson"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

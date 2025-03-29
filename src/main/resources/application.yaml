@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: interviewer
+  datasource:
+    url: jdbc:postgresql://localhost:5432/interviewer
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: password
+  jpa:
+    show-sql: false
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+storage_path: /Users/laurkankushu/dev/tmp/storage

@@ -1,0 +1,62 @@
+.editor-and-preview {
+    min-height: 72vh;
+}
+
+.editor-and-preview textarea {
+    min-height: 72vh;
+}
+
+.markdown-text.editor {
+    height: 100%;
+}
+
+.markdown-text{
+    font-size: 18px;
+    color: rgb(214, 214, 214);
+}
+
+.markdown-text pre {
+    background: #141414;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+textarea {
+    line-height: 1.8em !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: rgb(223, 222, 222) !important;
+}
+
+.markdown-text ul li {
+    list-style: circle !important;
+}
+
+.markdown-text ul {
+    padding-left: 2rem !important;
+}
+
+.markdown-text ol li {
+    list-style: inherit !important;
+    font-size: 18px;
+}
+
+@media screen and (max-width: 600px) {
+  .markdown-text{
+      font-size: 16px;
+  }
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-top: 3em !important;
+}

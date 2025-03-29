@@ -1,0 +1,79 @@
+<html dir="ltr">
+<head>
+    <title>Добавление топика</title>
+</head>
+<body class="dark">
+<div th:replace="~{fragments/styles.html}"></div>
+<main class="hp-bg-color-dark-90 d-flex min-vh-100">
+    <div th:replace="~{fragments/menu.html}"></div>
+    <div class="hp-main-layout">
+        <header th:replace="~{fragments/top-bar.html}"></header>
+
+        <div class="hp-main-layout-content">
+            <div class="col-12">
+                <div class="row justify-content-between">
+                    <div class="col pe-md-32 pe-md-120">
+                        <h4>Топики</h4>
+
+                        <p class="hp-p1-body">
+                            Добавить топик
+                        </p>
+                    </div>
+
+                    <div class="col-12 mt-16">
+                        <form action="/topics" method="post">
+                            <div class="mb-24">
+                                <label for="title" class="form-label">Название</label>
+                                <input type="text" name="title" id="title" class="form-control"/>
+                                <div id="titleHelp" class="form-text">Введите название топика</div>
+                            </div>
+                            <div class="mb-24">
+                                <label for="parentId" class="form-label">Выберите родительский топик</label>
+                                <select class="form-select" name="parentId" id="parentId">
+                                    <option value="">Корневой</option>
+                                    <option th:value="${parent.id}" th:each="parent : ${parents}"
+                                            th:text="${parent.title}" th:selected="${parent_id == parent.id}"></option>
+                                </select>
+                                <div id="parentHelp" class="form-text">Если родительского топика нет, то
+                                    выберите пункт «корневой»
+                                </div>
+                            </div>
+
+                            <div class="d-flex d-row justify-content-end">
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="scroll-to-top" onclick="scrollTopClick(event)">
+    <button type="button" class="btn btn-primary btn-icon-only rounded-circle hp-primary-shadow">
+        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="16px" width="16px"
+             xmlns="http://www.w3.org/2000/svg">
+            <g>
+                <path fill="none" d="M0 0h24v24H0z"></path>
+                <path d="M13 7.828V20h-2V7.828l-5.364 5.364-1.414-1.414L12 4l7.778 7.778-1.414 1.414L13 7.828z"></path>
+            </g>
+        </svg>
+    </button>
+</div>
+</body>
+<script>
+    window.addEventListener('scroll', function() {
+        if (document.querySelector('body').scrollTop > (document.querySelector('body').offsetHeight / 4)) {
+            document.querySelector('.scroll-to-top').classList.add('active');
+        } else {
+            document.querySelector('.scroll-to-top').classList.remove('active');
+        }
+    });
+
+    const scrollTopClick = (e) => {
+        e.preventDefault();
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+</script>
+</html>

@@ -1,0 +1,107 @@
+<html dir="ltr">
+<head>
+    <title>Список уроков</title>
+</head>
+<body class="dark">
+<div th:replace="~{fragments/styles.html}"></div>
+<main class="hp-bg-color-dark-90 d-flex min-vh-100">
+    <div th:replace="~{fragments/menu.html}"></div>
+    <div class="hp-main-layout">
+        <header th:replace="~{fragments/top-bar.html}"></header>
+
+        <div class="hp-main-layout-content">
+            <div class="row mb-32 gy-32">
+                <div class="col-12">
+                    <div class="d-flex justify-content-start">
+                        <a th:href="@{${back_id != null ? '/topics/' + back_id + '/child': '/topics'}}" class="btn btn-dark"
+                           style="margin-right: 10px">
+                            <i class="hp-text-color-dark-0 ri-2x ri-arrow-left-s-line"></i>
+                        </a>
+                    </div>
+                    <div class="row">
+                        <div class="d-flex picker">
+                            <a th:href="${'/topics/' + parent_id + '/child'}" class="btn btn-black-100">Топики</a>
+                            <a class="btn btn-black-100 active">Уроки</a>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="row g-32">
+
+                            <div class="col-12 col-md-6 col-xl-4" th:each="topic : ${topics}">
+                                <div class="card border-none text-center" style="cursor: pointer">
+                                    <a th:href="@{${'/topics/' + topic.id + '/child'}}"
+                                       class="card-body hp-knowledge-basic-card d-flex justify-content-center align-items-center">
+                                        <h4 th:text="${topic.title}"></h4>
+                                    </a>
+                                </div>
+                            </div>
+
+
+                            <style>
+                                ul li {
+                                    list-style: inherit !important;
+                                    font-size: 18px;
+                                    cursor: pointer
+                                }
+                                ul.list-group {
+                                    list-style: inherit !important;
+                                    width: 100%;
+                                }
+                                table tr {
+                                    cursor: pointer
+                                }
+
+                                table a {
+                                    color: rgb(255, 255, 255) !important;
+                                }
+                            </style>
+                            <div class="d-flex" style="padding: 0">
+                                <table class="table table-dark table-hover">
+                                    <tbody>
+                                        <tr th:each="lesson, itr : ${lessons}">
+                                            <td><a th:href="@{${'/lessons/' + lesson.id}}" th:text="${(itr.index + 1) + '.'}"></a></td>
+                                            <td style="width: 100%"><a th:href="@{${'/lessons/' + lesson.id}}" th:text="${lesson.title}"></a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <a th:href="@{${'/lessons/create/' + parent_id}}" class="btn btn-primary">+ Добавить</a>
+                            </div>
+
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="scroll-to-top" onclick="scrollTopClick(event)">
+    <button type="button" class="btn btn-primary btn-icon-only rounded-circle hp-primary-shadow">
+        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="16px" width="16px"
+             xmlns="http://www.w3.org/2000/svg">
+            <g>
+                <path fill="none" d="M0 0h24v24H0z"></path>
+                <path d="M13 7.828V20h-2V7.828l-5.364 5.364-1.414-1.414L12 4l7.778 7.778-1.414 1.414L13 7.828z"></path>
+            </g>
+        </svg>
+    </button>
+</div>
+</body>
+<script>
+    window.addEventListener('scroll', function() {
+        if (document.querySelector('body').scrollTop > (document.querySelector('body').offsetHeight / 4)) {
+            document.querySelector('.scroll-to-top').classList.add('active');
+        } else {
+            document.querySelector('.scroll-to-top').classList.remove('active');
+        }
+    });
+
+    const scrollTopClick = (e) => {
+        e.preventDefault();
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+    document.querySelector('.scroll-to-top')
+</script>
+</html>

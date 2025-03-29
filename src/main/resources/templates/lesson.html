@@ -1,0 +1,70 @@
+<html dir="ltr">
+<head>
+    <title th:text="${lesson.title}"></title>
+    <script th:src="@{/js/marked.js}"></script>
+</head>
+<body class="dark">
+<div th:replace="~{fragments/styles.html}"></div>
+<main class="hp-bg-color-dark-90 d-flex min-vh-100">
+    <div th:replace="~{fragments/menu.html}"></div>
+    <link th:href="@{/css/lesson.css}" rel="stylesheet"/>
+    <div class="hp-main-layout">
+        <header th:replace="~{fragments/top-bar.html}"></header>
+        <input type="hidden" id="theory" th:value="${lesson.theory}">
+        <div class="hp-main-layout-content d-flex justify-content-center"
+             style="margin: 0 20; width: 100%; max-width: 97%">
+            <div class="col-md-6 col-sm-12">
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex justify-content-start">
+                        <a th:href="@{${'/topics/' + lesson.topic.id + '/lessons'}}" class="btn btn-dark"
+                           style="margin-right: 10px">
+                            <i class="hp-text-color-dark-0 ri-2x ri-arrow-left-s-line"></i>
+                        </a>
+                        <a th:href="@{${'/lessons/edit/' + lesson.id}}" class="btn btn-dark"><i
+                                class="hp-text-color-dark-0 iconly-Light-Edit"></i></a>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <a th:href="@{${'/lessons/' + lesson.id + '/questions'}}" class="btn btn-dark"><i
+                                class="hp-text-color-dark-0 ri-2x ri-question-line"></i></a>
+                    </div>
+                </div>
+                <h2 th:text="${lesson.title}" style="margin:0 0 20 0 !important"></h2>
+                <div class="markdown-text editor"></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="scroll-to-top" onclick="scrollTopClick(event)">
+    <button type="button" class="btn btn-primary btn-icon-only rounded-circle hp-primary-shadow">
+        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="16px" width="16px"
+             xmlns="http://www.w3.org/2000/svg">
+            <g>
+                <path fill="none" d="M0 0h24v24H0z"></path>
+                <path d="M13 7.828V20h-2V7.828l-5.364 5.364-1.414-1.414L12 4l7.778 7.778-1.414 1.414L13 7.828z"></path>
+            </g>
+        </svg>
+    </button>
+</div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        document.querySelector('.markdown-text').innerHTML = marked.parse(document.getElementById('theory').value);
+    })
+
+
+    window.addEventListener('scroll', function() {
+        if (document.querySelector('body').scrollTop > (document.querySelector('body').offsetHeight / 4)) {
+            document.querySelector('.scroll-to-top').classList.add('active');
+        } else {
+            document.querySelector('.scroll-to-top').classList.remove('active');
+        }
+    });
+
+    const scrollTopClick = (e) => {
+        e.preventDefault();
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+</script>
+</html>

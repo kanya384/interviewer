@@ -1,0 +1,49 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                           http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="create_topics_table" author="laurkan">
+        <preConditions>
+            <not>
+                <tableExists tableName="topics"/>
+            </not>
+        </preConditions>
+        <createTable tableName="topics">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent_id" type="bigint">
+            </column>
+            <column name="created_at" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="date">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="topics"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="create_topics_parent_foreign_key" author="laurkan">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_topics_parent"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="topics"
+                                 baseColumnNames="parent_id"
+                                 referencedTableName="topics"
+                                 referencedColumnNames="id"
+                                 onDelete="SET NULL"
+                                 constraintName="fk_topics_parent"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="order_item" constraintName="fk_topics_parent"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

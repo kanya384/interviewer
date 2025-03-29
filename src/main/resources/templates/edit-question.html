@@ -1,0 +1,120 @@
+<html dir="ltr">
+<head>
+    <title>Добавление вопроса</title>
+    <script th:src="@{/js/marked.js}"></script>
+</head>
+<body class="dark">
+<div th:replace="~{fragments/styles.html}"></div>
+<main class="hp-bg-color-dark-90 d-flex min-vh-100">
+    <div th:replace="~{fragments/menu.html}"></div>
+    <link th:href="@{/css/lesson.css}" rel="stylesheet"/>
+    <div class="hp-main-layout">
+        <header th:replace="~{fragments/top-bar.html}"></header>
+
+        <div class="hp-main-layout-content" style="margin: 0 20; width: 100%; max-width: 97%">
+            <div class="col-12">
+                <form action="/questions/update" method="post">
+                    <div class="mb-24">
+                        <label for="title" class="form-label">Вопрос</label>
+                        <input type="text" name="title" id="title" class="form-control"
+                               placeholder="Введите вопрос"
+                               th:value="${question.title}"
+                        />
+                    </div>
+                    <div class="row editor-and-preview">
+                        <div class="col-6" style="position: relative">
+                            <div class="col-6 d-flex justify-content-end" style="position: absolute; right: 17; top: 5">
+                                <button onclick="uploadClick(event)" class="btn btn-sm btn-black-100">
+                                    <i class="hp-text-color-dark-0 iconly-Light-Image"></i>
+                                </button>
+                                <input type="file" id="file" style="display: none">
+                            </div>
+                            <textarea name="answer" id="answer" style="height:100%"
+                                      class="form-control mb-16"
+                                      th:text="${question.answer}"
+                                      placeholder="Введите текст ответа"></textarea>
+                        </div>
+                        <div class="col-6">
+                            <div class="markdown-text editor"></div>
+                        </div>
+                    </div>
+                    <input type="hidden" th:value="${question.id}" id="id" name="id">
+                    <input type="hidden" th:value="${question.lesson.id}" id="lessonId" name="lessonId">
+                    <div class="d-flex justify-content-end" style="margin-top: 10px">
+                        <div>
+                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="scroll-to-top" onclick="scrollTopClick(event)">
+    <button type="button" class="btn btn-primary btn-icon-only rounded-circle hp-primary-shadow">
+        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="16px" width="16px"
+             xmlns="http://www.w3.org/2000/svg">
+            <g>
+                <path fill="none" d="M0 0h24v24H0z"></path>
+                <path d="M13 7.828V20h-2V7.828l-5.364 5.364-1.414-1.414L12 4l7.778 7.778-1.414 1.414L13 7.828z"></path>
+            </g>
+        </svg>
+    </button>
+</div>
+</body>
+<script>
+    document.getElementById('answer').addEventListener('input', event => {
+        document.querySelector('.markdown-text').innerHTML = marked.parse(document.getElementById('answer').value);
+    });
+
+
+    window.addEventListener('scroll', function() {
+        if (document.querySelector('body').scrollTop > (document.querySelector('body').offsetHeight / 4)) {
+            document.querySelector('.scroll-to-top').classList.add('active');
+        } else {
+            document.querySelector('.scroll-to-top').classList.remove('active');
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function(){
+        document.querySelector('.markdown-text').innerHTML = marked.parse(document.getElementById('answer').value);
+    })
+
+    const scrollTopClick = (e) => {
+        e.preventDefault();
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    const uploadClick = (e) => {
+        e.preventDefault();
+        document.querySelector('input[type="file"]').click();
+    }
+
+    document.querySelector('input[type="file"]').addEventListener('change', async (event) => {
+      if (event.target.files && event.target.files[0]) {
+          const file = event.target.files[0];
+
+          const formData = new FormData();
+          formData.append("file", file);
+
+          try {
+            const response = await fetch("/pictures", {
+              method: "POST",
+              body: formData,
+            });
+
+            let data = await response.json();
+
+            const imageName = data.name;
+            let markdownImageLink = "![alt image](/picture/" + imageName + ")";
+
+            document.getElementById('answer').value += markdownImageLink;
+            document.getElementById('answer').dispatchEvent(new Event('input',{}))
+          } catch (e) {
+            console.log(e);
+          }
+      }
+    });
+</script>
+</html>

@@ -1,0 +1,109 @@
+<html dir="ltr">
+<head>
+    <title>Список вопросов</title>
+    <script th:src="@{/js/marked.js}"></script>
+</head>
+<body class="dark">
+<div th:replace="~{fragments/styles.html}"></div>
+<main class="hp-bg-color-dark-90 d-flex min-vh-100">
+    <div th:replace="~{fragments/menu.html}"></div>
+    <div class="hp-main-layout">
+        <header th:replace="~{fragments/top-bar.html}"></header>
+
+        <div class="hp-main-layout-content">
+            <div class="row mb-32 gy-32">
+                <div class="col-12">
+
+                <div class="d-flex justify-content-between" style="margin-bottom: 10px">
+                    <div class="d-flex justify-content-end">
+                        <a th:href="@{${'/lessons/' + lessonId}}" class="btn btn-dark">
+                            <i class="hp-text-color-dark-0 ri-2x ri-arrow-left-s-line"></i>
+                        </a>
+                    </div>
+                </div>
+                <style>
+                    .accordion .accordion-item .accordion-header button {
+                        padding: 20 30;
+                    }
+                </style>
+
+                <div class="col-12">
+                    <div class="accordion accordion-flush" id="accordionFlushExample">
+
+                        <div class="accordion-item" th:each="question, itr : ${questions}">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                    <div class="row align-items-center">
+                                        <div class="col pe-16">
+                                            <p class="d-flex align-items-center hp-p1-body mb-0">
+                                                <span th:text="${(itr.index + 1) + '. ' + question.title}"></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </button>
+                            </h2>
+
+                            <div class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample" style="">
+                                <div class="accordion-body">
+                                    <div class="d-flex justify-content-start">
+                                        <div class="d-flex justify-content-end">
+                                            <a th:href="@{${'/questions/edit/' + question.id}}" class="btn btn-dark"><i
+                                                    class="hp-text-color-dark-0 iconly-Light-Edit"></i></a>
+                                        </div>
+                                    </div>
+                                    <p class="hp-p1-body"></p>
+                                    <input type="hidden" class="marked-text" th:value="${question.answer}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center" style="margin-top: 20px">
+                    <a th:href="@{${'/questions/create/' + lessonId}}" class="btn btn-primary">+ Добавить</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="scroll-to-top" onclick="scrollTopClick(event)">
+    <button type="button" class="btn btn-primary btn-icon-only rounded-circle hp-primary-shadow">
+        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="16px" width="16px"
+             xmlns="http://www.w3.org/2000/svg">
+            <g>
+                <path fill="none" d="M0 0h24v24H0z"></path>
+                <path d="M13 7.828V20h-2V7.828l-5.364 5.364-1.414-1.414L12 4l7.778 7.778-1.414 1.414L13 7.828z"></path>
+            </g>
+        </svg>
+    </button>
+</div>
+</body>
+<script>
+    window.addEventListener('scroll', function() {
+        if (document.querySelector('body').scrollTop > (document.querySelector('body').offsetHeight / 4)) {
+            document.querySelector('.scroll-to-top').classList.add('active');
+        } else {
+            document.querySelector('.scroll-to-top').classList.remove('active');
+        }
+    });
+
+    const scrollTopClick = (e) => {
+        e.preventDefault();
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    document.querySelectorAll('.accordion-header').forEach(el => {
+        el.addEventListener('click', el => {
+            if (el.currentTarget.parentNode.querySelector('.accordion-button').classList.contains('collapsed')) {
+                el.currentTarget.parentNode.querySelector('.accordion-button').classList.remove('collapsed');
+                el.currentTarget.parentNode.querySelector('.accordion-collapse').classList.add('show');
+                el.currentTarget.parentNode.querySelector('.accordion-body .hp-p1-body').innerHTML = marked.parse(el.currentTarget.parentNode.querySelector('.marked-text').value);
+            } else {
+                el.currentTarget.parentNode.querySelector('.accordion-button').classList.add('collapsed');
+                el.currentTarget.parentNode.querySelector('.accordion-collapse').classList.remove('show');
+            }
+        })
+    })
+</script>
+</html>
