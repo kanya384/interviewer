@@ -60,3 +60,44 @@ h5,
 h6 {
     margin-top: 3em !important;
 }
+
+.hljs{
+    background: none !important;
+}
+
+.hljs-meta{
+    color: olive !important;
+    opacity: 1 !important;
+}
+
+.hljs-keyword,
+.hljs-type
+{
+    color: rgb(163, 115, 92) !important;
+    opacity: 1 !important;
+}
+
+.hljs,
+.hljs-title
+{
+    color: rgb(153,155,160) !important;
+}
+
+.hljs-variable,
+.hljs-built_in
+{
+    color: rgb(149,97,141) !important;
+    opacity: 1 !important;
+}
+
+.hljs-params{
+    color: rgb(153,155,160) !important;
+}
+
+.hljs-comment {
+    color: rgb(121,125,132) !important;
+}
+
+pre {
+    background: #141414 !important;
+}

@@ -1,7 +1,12 @@
 <html dir="ltr">
 <head>
     <title>Редактирование урока</title>
-    <script th:src="@{/js/marked.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked-highlight/lib/index.umd.js"></script>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/tokyo-night-dark.css">
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+    <script th:src="@{/js/marked-conf.js}"></script>
 </head>
 <body class="dark">
 <div th:replace="~{fragments/styles.html}"></div>
@@ -65,57 +70,62 @@
 </div>
 </body>
 <script>
+    marked.setOptions({
 
-    document.getElementById('theory').addEventListener('input', event => {
-        document.querySelector('.markdown-text').innerHTML = marked.parse(document.getElementById('theory').value);
-    });
-
-    document.addEventListener('DOMContentLoaded', function(){
-        document.querySelector('.markdown-text').innerHTML = marked.parse(document.getElementById('theory').value);
-    })
-
-    window.addEventListener('scroll', function() {
-        if (document.querySelector('body').scrollTop > (document.querySelector('body').offsetHeight / 4)) {
-            document.querySelector('.scroll-to-top').classList.add('active');
-        } else {
-            document.querySelector('.scroll-to-top').classList.remove('active');
-        }
-    });
-
-    const scrollTopClick = (e) => {
-        e.preventDefault();
-        window.scrollTo({top: 0, behavior: 'smooth'});
-    }
-
-    const uploadClick = (e) => {
-        e.preventDefault();
-        document.querySelector('input[type="file"]').click();
-    }
-
-    document.querySelector('input[type="file"]').addEventListener('change', async (event) => {
-      if (event.target.files && event.target.files[0]) {
-          const file = event.target.files[0];
-
-          const formData = new FormData();
-          formData.append("file", file);
-
-          try {
-            const response = await fetch("/pictures", {
-              method: "POST",
-              body: formData,
-            });
-
-            let data = await response.json();
-
-            const imageName = data.name;
-            let markdownImageLink = "![alt image](/picture/" + imageName + ")";
-
-            document.getElementById('theory').value += markdownImageLink;
-            document.getElementById('theory').dispatchEvent(new Event('input',{}))
-          } catch (e) {
-            console.log(e);
-          }
+      highlight: function(code) {
+        return hljs.highlightAuto(code).value;
       }
     });
+document.getElementById('theory').addEventListener('input', event => {
+    document.querySelector('.markdown-text').innerHTML = marked.parse(document.getElementById('theory').value);
+});
+
+document.addEventListener('DOMContentLoaded', function(){
+    document.querySelector('.markdown-text').innerHTML = marked.parse(document.getElementById('theory').value);
+})
+
+window.addEventListener('scroll', function() {
+    if (document.querySelector('body').scrollTop > (document.querySelector('body').offsetHeight / 4)) {
+        document.querySelector('.scroll-to-top').classList.add('active');
+    } else {
+        document.querySelector('.scroll-to-top').classList.remove('active');
+    }
+});
+
+const scrollTopClick = (e) => {
+    e.preventDefault();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+const uploadClick = (e) => {
+    e.preventDefault();
+    document.querySelector('input[type="file"]').click();
+}
+
+document.querySelector('input[type="file"]').addEventListener('change', async (event) => {
+  if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await fetch("/pictures", {
+          method: "POST",
+          body: formData,
+        });
+
+        let data = await response.json();
+
+        const imageName = data.name;
+        let markdownImageLink = "![alt image](/picture/" + imageName + ")";
+
+        document.getElementById('theory').value += markdownImageLink;
+        document.getElementById('theory').dispatchEvent(new Event('input',{}))
+      } catch (e) {
+        console.log(e);
+      }
+  }
+});
 </script>
 </html>

@@ -1,7 +1,12 @@
 <html dir="ltr">
 <head>
     <title th:text="${lesson.title}"></title>
-    <script th:src="@{/js/marked.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked-highlight/lib/index.umd.js"></script>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/tokyo-night-dark.css">
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+    <script th:src="@{/js/marked-conf.js}"></script>
 </head>
 <body class="dark">
 <div th:replace="~{fragments/styles.html}"></div>
@@ -49,6 +54,12 @@
 </div>
 </body>
 <script>
+    marked.setOptions({
+      highlight: function(code) {
+        return hljs.highlightAuto(code).value;
+      }
+    });
+
     document.addEventListener('DOMContentLoaded', function(){
         document.querySelector('.markdown-text').innerHTML = marked.parse(document.getElementById('theory').value);
     })

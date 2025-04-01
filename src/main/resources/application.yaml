@@ -1,3 +1,5 @@
+server:
+  port: 80
 spring:
   application:
     name: interviewer
@@ -10,4 +12,4 @@ spring:
     show-sql: false
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.xml
-storage_path: /Users/laurkankushu/dev/tmp/storage
+storage_path: ./storage
